@@ -13,29 +13,32 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/hello', function () {
-    return "<h2>hello docker</h2>";
-});
-
-
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'PostController@detail');
 
 Route::get('/posts', 'PostController@detail');
 
-Route::get('/posts/add', 'PostController@add');
+Route::middleware('auth.basic')->group(function () {
+    Route::get('/posts/add', 'PostController@add');
 
-Route::post('/posts/add/confirm', 'PostController@confirmPost');
+    Route::post('/posts/add/confirm', 'PostController@confirmPost');
 
-Route::post('/posts/add/confirm/insert', 'PostController@insert');
+    Route::post('/posts/add/confirm/insert', 'PostController@insert');
 
-Route::get('/posts/update/{id}', 'PostController@update');
+    Route::get('/posts/update/{id}', 'PostController@update');
 
-Route::post('/posts/update/confirm', 'PostController@updateConfirm');
+    Route::post('/posts/update/confirm', 'PostController@updateConfirm');
 
-Route::post('/posts/update/modify', 'PostController@updatePost');
+    Route::post('/posts/update/modify', 'PostController@updatePost');
+
+    Route::post('/posts/delete', 'PostController@delete');
+
+    Route::get('/posts/download', 'PostController@export');
+
+    Route::get('/posts/upload', 'PostController@upload');
+
+    Route::post('/posts/upload/excel', 'PostController@import');
+});
+
 
 //users
 

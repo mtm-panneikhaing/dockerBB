@@ -26,12 +26,13 @@ class PostController extends Controller
         $this->postInterface = $postInterface;
     }
 
+    
     /**
      * post detail
      */
-    public function detail()
+    public function detail(Request $request)
     {
-        $postList = Post::all();
+        $postList = $this->postInterface->getPostList($request);
         return view('posts.post_list', [
             'posts' => $postList
         ]);
@@ -128,5 +129,18 @@ class PostController extends Controller
         $this->postInterface->updatePost($request);
         return redirect('/posts')
             ->with('info', 'Update Post Successfully');
+    }
+    /**
+     * delete post
+     * @param delete id
+     * @return info
+     */
+    public function delete(Request $request)
+    {
+        $id = $request->id;
+
+        $this->postInterface->deletePost($id);
+        return redirect('/posts')
+            ->with('info', 'Post  Deleted');
     }
 }

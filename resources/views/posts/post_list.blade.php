@@ -37,19 +37,30 @@
           </a>
         </td>
         <td>{{ $post->description }}</td>
-        <td>{{ $post->user->name}}</td>
+        <td>{{ $post->user->name}}{{ $post->status}}</td>
         <td>{{ $post->created_at->format('m/d/y') }}</td>
-        <td>
+         @auth
+          <td>
+            @if(Auth::user()->id == $post->create_user_id )
+            @if($post->status == 1)
             <a href='{{url("/posts/update/$post->id")}}' class="btn btn-success btn-xs">
-            <i class="fas fa-edit"></i>Edit
+              <i class="fas fa-edit"></i>
             </a>
-        </td>
-        <td>
-          <a href='{{url("/posts/update/$post->id")}}' class="btn btn-success btn-xs">
-          <i class="fas fa-edit">
-          </i>
-          </a>
-        </td>
+            @else
+            <a href='{{url("/posts/update/$post->id")}}' class="btn btn-dark opacity-1 btn-xs">
+              <i class="fas fa-edit"></i>
+            </a>
+            @endif
+            @endif
+          </td>
+          <td>
+            @if(Auth::user()->id == $post->create_user_id )
+            <a data-toggle="modal" data-target="#deleteConfirm" class="delete btn btn-danger" data-id="{{ $post->id }}">
+              <i class="fas fa-trash-alt"></i>
+            </a>
+            @endif
+          </td>
+          @endauth
       </tr>
       @endforeach
     </tr>
@@ -85,6 +96,38 @@
       </div>
     </div>
   </div>
+  <!-- Delete Confirmation Modal -->
+<div class="modal flade" id="deleteConfirm" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title center">Delete Confirmation</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <form action="{{ url('posts/delete')}}" method="post">
+          @csrf
+          <div class="mb-4">
+            <input type="hidden" id="id" name="id" value="">
+            <h5>Are you sure to delete?</h5>
+          </div>
+          <div class="mt-4">
+            <input type="submit" class="btn btn-primary ml-4" value="Yes"></button>
+            <button class="btn btn-danger mr-4" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+
+
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="row justify-content-center">{{ $posts->links() }}</div>
+</div>
+
 </div>  
 <script>
   // photo review 
