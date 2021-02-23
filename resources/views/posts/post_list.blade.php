@@ -11,11 +11,11 @@
     <div class="form-group row">
       <input type="text" class="col-lg-3 col-md-12 ml-3 mr-2 mb-2" placeholder="Search" name="search">
       <input type="submit" value="Search" class="btn btn-primary col-lg-2 col-md-6 mr-2 mb-2">
-
+      @auth
       <a href="{{url('/posts/add')}}" class="btn btn-primary col-lg-2 col-md-6 mr-2 mb-2">Add</a>
       <a href="{{url('/posts/upload')}}" class="btn btn-primary col-lg-2 col-md-6 mr-2 mb-2">Upload</a>
       <a href="{{ url('/posts/download') }}" class="btn btn-primary col-lg-2 col-md-6 mr-2 mb-2">Download</a>
-      
+      @endauth
     </div>
   </form>
   <table class="table table-striped mt-3 ">
@@ -37,7 +37,7 @@
           </a>
         </td>
         <td>{{ $post->description }}</td>
-        <td>{{ $post->user->name}}{{ $post->status}}</td>
+        <td>{{ $post->user->name }}</td>
         <td>{{ $post->created_at->format('m/d/y') }}</td>
          @auth
           <td>

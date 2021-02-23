@@ -7,6 +7,7 @@
     </div>
     @endif
     <h2 class="mb-4">User Lists</h2>
+    <form action="{{ url('search/user') }}" >
     @csrf
     <div class="form-inline mb-3">
         <input type="text" placeholder="Name" class="form-control mr-2 mb-2 col-lg-2 col-md-5" name="name">
@@ -18,6 +19,7 @@
         <a href="/users/create" class="btn btn-primary mr-2 mb-2 col-lg-1 col-md-5">Add</a>
         @endif
     </div>
+    </form>
     <table class="table table-striped">
         <tr>
             <th>Name</th>

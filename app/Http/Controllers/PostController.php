@@ -26,6 +26,47 @@ class PostController extends Controller
         $this->postInterface = $postInterface;
     }
 
+    /**
+     * export csv file
+     * @return excel file
+     */
+    public function export()
+    {
+        return Excel::download(new PostsExport, 'posts.xlsx');
+    }
+
+    /**
+     * Upload link to view
+     */
+    public function upload()
+    {
+        return view("posts.post_upload");
+    }
+
+    /**
+     * import csv file
+     * @param request
+     */
+    public function import()
+    {
+        $validator = validator(request()->all(), [
+            'file'=>'required', 'mimes:csv','size:max:500',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
+        $path = request()->file('file');
+        $import = new PostsImport;
+        $import->import($path);
+        
+        if ($import->failures()->isNotEmpty()) {
+            return back()->withFailures($import->failures());
+        } else {
+            return redirect('/posts');
+        }
+    }
     
     /**
      * post detail
